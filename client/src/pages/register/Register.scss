@@ -1,0 +1,32 @@
+.register {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #cfdcea;
+
+    .btnDangky {
+        font-size: 15px;
+    }
+
+
+    .form-group {
+        margin-bottom: 15px;
+
+        label {
+            font-weight: bold;
+            color: #010810;
+        }
+        .form-control {
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 10px;
+            transition: all 0.3s ease;
+
+            &:focus {
+                border-color: #0056b3;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+        }
+    }
+}

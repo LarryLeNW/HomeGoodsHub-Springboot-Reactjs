@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+        <nav th:replace="~{home/_menu::nav}" ></nav>
+
+	<h3>form login</h3>
+	<hr>
+	<i th:text="${message}" style="color: red"></i>
+
+	<form action="/auth/login" method="post">
+
+		<input name="username" placeholder="username ? .."> <input
+			name="password" placeholder="password ? .."> <input
+			name="remember" type="checkbok"> Remember me? <br>
+		<button>login</button>
+	</form>
+
+</body>
+</html>
