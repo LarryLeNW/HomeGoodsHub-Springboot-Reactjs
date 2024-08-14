@@ -148,9 +148,8 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody User customer, HttpServletResponse response) {
 		try {
-			System.out.println("chạy tới login");
 			Optional<User> item = UserDAO.findByEmail(customer.getEmail());
-			System.out.println(item.toString());
+			System.out.println("result : " +item.toString());
 			if (item.isPresent()) {
 				String token = jwtutil.generateToken(customer.getEmail());
 				User itemCustomer = item.get();
@@ -160,7 +159,6 @@ public class AuthController {
 				jwtCookie.setMaxAge(24 * 60 * 60);
 				response.addCookie(jwtCookie);
 				return ResponseEntity.ok(item.get());
-
 			} else {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not found");
 			}

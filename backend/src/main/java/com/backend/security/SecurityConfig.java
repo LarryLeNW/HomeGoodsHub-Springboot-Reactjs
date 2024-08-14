@@ -45,7 +45,6 @@ public class SecurityConfig {
 	}
 
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptEncoder);
 	}
 
@@ -55,7 +54,7 @@ public class SecurityConfig {
 	        .csrf().disable() // Tắt CSRF vì không sử dụng đăng nhập dựa trên form
 	        .authorizeHttpRequests()
 	        .requestMatchers("/**").permitAll()
-	        .anyRequest().authenticated()
+	        .anyRequest().permitAll()
 	        .and()
 	        .exceptionHandling()
 	        .authenticationEntryPoint(authenticationEntryPoint)
