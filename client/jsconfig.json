@@ -2,5 +2,6 @@
   "compilerOptions": {
     "baseUrl": "src"
   },
+  "include": ["src", "src/redux/sagas/.saga.js"],
   "exclude": ["node_modules", "build"]
 }

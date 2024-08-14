@@ -10,10 +10,11 @@ function Button({
     fw,
     disabled,
     isLoading,
+    type = "button",
 }) {
     return (
-        <div
-            type="button"
+        <button
+            type={type}
             className={
                 style ||
                 `px-4 p-2 rounded-md text-white bg-main font-semibold cursor-pointer text-center ${
@@ -22,7 +23,7 @@ function Button({
         `
             }
             onClick={() => {
-                !isLoading && !disabled && handleClick && handleClick();
+                !isLoading && !disabled && type != "submit" && handleClick();
             }}
         >
             <div className="flex gap-2 justify-center items-center">
@@ -37,7 +38,7 @@ function Button({
                     </div>
                 )}
             </div>
-        </div>
+        </button>
     );
 }
 

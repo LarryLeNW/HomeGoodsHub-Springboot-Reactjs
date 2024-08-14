@@ -1,31 +1,27 @@
 {
-  "name": "duan",
+  "name": "client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@fortawesome/react-fontawesome": "^0.2.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "antd": "^5.20.1",
-    "axios": "^1.7.2",
-    "bootstrap": "^5.3.3",
-    "duan": "file:",
-    "jquery": "^3.7.1",
-    "js-cookie": "^3.0.5",
+    "antd": "^5.20.0",
+    "axios": "^1.7.3",
+    "client": "file:",
+    "dayjs": "^1.11.12",
+    "dotenv": "^16.4.5",
+    "moment": "^2.30.1",
+    "qs": "^6.13.0",
     "react": "^18.3.1",
-    "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.52.2",
     "react-icons": "^5.2.1",
-    "react-paginate": "^8.2.0",
-    "react-router-dom": "^6.25.1",
+    "react-router-dom": "^6.26.0",
     "react-scripts": "5.0.1",
-    "react-slick": "^0.30.2",
-    "react-toastify": "^10.0.5",
-    "sass": "^1.77.6",
-    "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.12.4",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zustand": "^4.5.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -52,6 +48,6 @@
     ]
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.9"
+    "tailwindcss": "^3.4.8"
   }
 }

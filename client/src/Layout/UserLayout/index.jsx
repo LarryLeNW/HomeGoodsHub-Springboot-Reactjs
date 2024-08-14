@@ -1,14 +1,16 @@
-import Footer from "Layout/Common/Footer";
-import Navigation from "Layout/Common/Navigation";
-import UserHeader from "Layout/Common/UserHeader";
 import { Outlet } from "react-router-dom";
+import Header from "./Header";
+import Navigation from "./Navigation";
+import Footer from "./Footer";
 
 function UserLayout() {
     return (
-        <div>
+        <div className="w-full flex flex-col items-center">
+            <Header />
             <Navigation />
-            <UserHeader />
-            <Outlet />
+            <div className="w-full flex flex-col  min-h-[80vh]">
+                <Outlet />
+            </div>
             <Footer />
         </div>
     );
