@@ -1,48 +1,19 @@
-// import { register } from "apis";
 import Button from "components/Form/Button";
-import InputField from "components/Form/InputField";
 import InputForm from "components/Form/InputForm";
 import paths from "constant/path";
 import withBaseComponent from "hocs";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-// import { useDispatch, useSelector } from "react-redux";
-import {
-    Link,
-    generatePath,
-    useNavigate,
-    useSearchParams,
-} from "react-router-dom";
+import { Link, generatePath, useSearchParams } from "react-router-dom";
 import { useAuthStore } from "store/auth.store";
-// import { loginRequest } from  "redux/slicers/auth.slicer";
-import Swal from "sweetalert2";
-import { validateForm } from "utils/helper";
 
-function Login({ navigate }) {
-    const { userInfo, loginRequest, dataLogin } = useAuthStore();
+function Auth({ navigate }) {
+    const { loginRequest, dataRegister, dataLogin, registerRequest } =
+        useAuthStore();
 
     const [searchParams] = useSearchParams();
 
-    // const dispatch = useDispatch();
-
-    const { isLoadingLogin } = false;
     const [isRegister, setIsRegister] = useState(false);
-    const [inValidFields, setInValidFields] = useState({});
-    const [isLoadingRegister, setIsLoadingRegister] = useState(false);
-
-    // const [payload, setPayload] = useState({
-    //     email: "",
-    //     password: "",
-    //     username: "",
-    // });
-
-    // const resetPayload = () => {
-    //     setPayload({
-    //         email: "",
-    //         password: "",
-    //         username: "",
-    //     });
-    // };
 
     const {
         register,
@@ -53,37 +24,11 @@ function Login({ navigate }) {
 
     const handleAuth = useCallback(
         async (data) => {
-            console.log("🚀 ~ data:", data);
             if (isRegister) {
-                console.log("🚀 ~ isRegister:", isRegister);
+                registerRequest(data, navigate);
                 return;
             }
             loginRequest(data, navigate);
-            // const { username, ...dataLogin } = payload;
-            // if (isRegister) {
-            //   setIsLoadingRegister(true);
-            //   try {
-            //     const response = await register(payload);
-            //     const { message } = response;
-            //     Swal.fire("Congratulation!", message, "success")
-            //       .then(setIsRegister(false))
-            //       .then(resetPayload());
-            //   } catch (error) {
-            //     Swal.fire("Oops!", error?.response?.data?.message, "error");
-            //   }
-            //   setIsLoadingRegister(false);
-            // } else
-            //   dispatch(
-            //     loginRequest({
-            //       dataLogin,
-            //       onSuccess: () => {
-            //         navigate(searchParams.get("redirect") || path.HOME);
-            //       },
-            //       onFailure: () => {
-            //         Swal.fire("Oops!", "Email hoặc mật khẩu không đúng!", "error");
-            //       },
-            //     })
-            //   );
         },
         [isRegister]
     );
@@ -146,7 +91,7 @@ function Login({ navigate }) {
                     type="submit"
                     name={isRegister ? "Đăng kí" : "Đăng nhập"}
                     fw
-                    isLoading={dataLogin.isLoading}
+                    isLoading={dataLogin.isLoading || dataRegister.isLoading}
                 />
                 <div className="flex justify-between w-full items-center mt-2 text-sm">
                     <Link
@@ -171,4 +116,4 @@ function Login({ navigate }) {
     );
 }
 
-export default withBaseComponent(Login);
+export default withBaseComponent(Auth);

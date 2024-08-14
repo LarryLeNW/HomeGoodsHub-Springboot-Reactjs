@@ -20,8 +20,9 @@ import { useState } from "react";
 import { useAuthStore } from "store/auth.store";
 import { logout } from "apis";
 
-function Header({ useSelector, dispatch, navigate }) {
+function Header({ navigate }) {
     const { userInfo } = useAuthStore();
+    console.log("🚀 ~ Header ~ userInfo:", userInfo);
 
     const [isShowMenuMember, setIsShowMenuMember] = useState(false);
     const [isModalSearch, setIsModalSearch] = useState(false);
@@ -163,7 +164,7 @@ function Header({ useSelector, dispatch, navigate }) {
                             onClick={() => setIsShowMenuMember(true)}
                         >
                             <span className="font-bold text-lg">
-                                {userInfo.data?.email}
+                                {userInfo.data?.username}
                             </span>
                             <img
                                 src={

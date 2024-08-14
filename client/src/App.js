@@ -4,7 +4,7 @@ import paths from "constant/path";
 import Modal from "components/Modal";
 import UserLayout from "layout/UserLayout";
 import { Route, Routes } from "react-router-dom";
-import { LoginPage } from "pages/user";
+import { AuthPage, HomePage } from "pages/user";
 import { useEffect } from "react";
 import { useAuthStore } from "store/auth.store";
 
@@ -20,7 +20,7 @@ function App() {
         <div className="min-h-screen font-main">
             <Routes>
                 <Route element={<UserLayout />}>
-                    <Route index element={<div> HomePage</div>} />
+                    <Route index element={<HomePage />} />
                     <Route
                         path={paths.DETAIL_CART}
                         element={<div>DetailCartPage</div>}
@@ -115,7 +115,7 @@ function App() {
                         element={<div>UpdateBlogPage</div>}
                     />
                 </Route>
-                <Route path={paths.LOGIN} element={<LoginPage />} />
+                <Route path={paths.LOGIN} element={<AuthPage />} />
                 <Route
                     path={paths.MEMBER.CHECKOUT}
                     element={<div>CheckoutPage</div>}

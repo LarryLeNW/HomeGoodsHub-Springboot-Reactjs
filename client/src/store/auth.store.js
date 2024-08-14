@@ -1,7 +1,6 @@
 import { notification } from "antd";
-import { getUserInfo, login, logout } from "apis";
+import { getUserInfo, login, logout, register } from "apis";
 import paths from "constant/path";
-import Swal from "sweetalert2";
 import { create } from "zustand";
 
 const showNotification = (type, message) => {
@@ -21,6 +20,10 @@ export const useAuthStore = create((set) => ({
         isLoading: false,
         error: null,
     },
+    dataRegister: {
+        isLoading: false,
+        error: null,
+    },
     fetchUserInfo: async () => {
         set(() => ({
             userInfo: {
@@ -37,7 +40,7 @@ export const useAuthStore = create((set) => ({
                     error: null,
                 },
             }));
-            showNotification("success", `Chào mừng ${response.email}`);
+            showNotification("success", `Chào mừng ${response.username}`);
         } catch (error) {
             set(() => ({
                 userInfo: {
@@ -45,6 +48,37 @@ export const useAuthStore = create((set) => ({
                     error: error.message,
                 },
             }));
+        }
+    },
+    registerRequest: async (dataPayload, navigate) => {
+        set(() => ({
+            dataRegister: {
+                isLoading: true,
+                error: null,
+            },
+        }));
+        try {
+            const response = await register(dataPayload);
+            set(() => ({
+                userInfo: {
+                    data: response,
+                },
+                dataRegister: {
+                    isLoading: false,
+                    error: null,
+                },
+            }));
+            showNotification("success", "Đăng kí thành công.");
+            navigate(paths.HOME);
+        } catch (error) {
+            console.log("🚀 ~ loginRequest: ~ error:", error);
+            set(() => ({
+                dataRegister: {
+                    isLoading: false,
+                    error: error?.response?.data,
+                },
+            }));
+            showNotification("error", error?.response?.data);
         }
     },
     loginRequest: async (dataPayload, navigate) => {

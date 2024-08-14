@@ -4,6 +4,7 @@ export const getUserInfo = () =>
     axios({
         url: "/current",
         method: "get",
+        withCredentials: true,
     });
 
 export const login = (data) =>
@@ -19,14 +20,14 @@ export const logout = () =>
         method: "get",
     });
 
-/// processing ...
 export const register = (data) =>
     axios({
-        url: "/user/register",
+        url: "/register",
         method: "post",
         data,
-        withCredentials: true,
     });
+
+/// processing ...
 
 export const forgotPassword = (data) =>
     axios({
