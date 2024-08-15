@@ -27,13 +27,13 @@ import com.backend.util.UploadFile;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-@RequestMapping("/admin/api/role")
+@RequestMapping("/api")
 public class RoleController {
 	   @Autowired
 	    RoleDAO roleDAO;
 	    
 
-	    @GetMapping("")
+	    @GetMapping("/admin/role")
 	    public ResponseEntity<?> get(
 	            @RequestParam(defaultValue = "0") int page,
 	            @RequestParam(defaultValue = "8") int pageSize,
@@ -61,7 +61,7 @@ public class RoleController {
 	        }
 	    }
 
-	    @PostMapping("")
+	    @PostMapping("/admin/role")
 	    public ResponseEntity<?> create(
 	            @RequestBody Role role) {
 

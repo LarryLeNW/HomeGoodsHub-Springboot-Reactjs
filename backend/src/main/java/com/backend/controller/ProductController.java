@@ -31,7 +31,7 @@ import com.backend.util.UploadFile;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-@RequestMapping("/api/product")
+@RequestMapping("/api")
 public class ProductController {
 
 	@Autowired
@@ -40,13 +40,15 @@ public class ProductController {
 	@Autowired
 	CategoryDAO categoryDAO;
 
-	@GetMapping("")
-	public ResponseEntity<?> get(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "8") int pageSize,
+	@GetMapping("/product")
+	public ResponseEntity<?> get(@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "9") int limit,
 			@RequestParam(required = false, defaultValue = "") String keywords,
 			@RequestParam(required = false) String sortBy,
 			@RequestParam(required = false, defaultValue = "asc") String sortOrder,
-			@RequestParam(required = false) String category) {
+			@RequestParam(required = false) String category , 
+			@RequestParam(required = false, defaultValue = "0") Integer minPrice, 
+			@RequestParam(required = false) Integer maxPrice) {
 
 		try {
 			Pageable pageable;
@@ -55,28 +57,50 @@ public class ProductController {
 				Sort.Direction direction = "desc".equalsIgnoreCase(sortOrder) ? Sort.Direction.DESC
 						: Sort.Direction.ASC;
 				Sort sort = Sort.by(direction, sortBy);
-				pageable = PageRequest.of(page, pageSize, sort);
+				pageable = PageRequest.of(page - 1 , limit, sort);
 			} else {
-				pageable = PageRequest.of(page, pageSize);
+				pageable = PageRequest.of(page - 1, limit);
 			}
 
 			Page<Product> itemPage;
 			if (category != null && !category.isEmpty()) {
 				itemPage = productDAO.findByNameLikeAndCategoryNameLike("%" + keywords + "%", "%" + category + "%",
 						pageable);
-			} else {
+			}else if(minPrice != null && maxPrice != null) {
+				itemPage = productDAO.findByunitPriceBetween(minPrice , maxPrice,
+						pageable);
+			}
+			else {
 				itemPage = productDAO.findAllByNameLike("%" + keywords + "%", pageable);
 			}
+
 			return ResponseEntity.ok(itemPage);
 		} catch (Exception e) {
-			e.printStackTrace(); // Print stack trace for debugging
+			e.printStackTrace(); 
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
+	
+	@GetMapping("/product/{id}")
+	public ResponseEntity<?> getOne(@PathVariable Integer id) {
 
-	@PostMapping("")
+		try {
+			Optional<Product> optionalProduct = productDAO.findById(id);
+			if (!optionalProduct.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+			}
+
+			return ResponseEntity.ok(optionalProduct.get());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
+	}
+	
+
+	@PostMapping("/admin/product")
 	public ResponseEntity<?> create(@RequestParam String name, @RequestParam Integer quantity,
-			@RequestParam double unitPrice, @RequestParam String desciption, @RequestParam Integer discount,
+			@RequestParam double unitPrice, @RequestParam String description, @RequestParam Integer discount,
 			@RequestParam Integer categoryId, @RequestParam(required = false) MultipartFile thumb,
 			@RequestParam(required = false) List<MultipartFile> images) {
 
@@ -89,7 +113,7 @@ public class ProductController {
 			product.setName(name);
 			product.setQuantity(quantity);
 			product.setUnitPrice(unitPrice);
-			product.setDescription(desciption);
+			product.setDescription(description);
 			product.setDiscount(discount);
 			product.setCategory(category);
 
@@ -112,11 +136,13 @@ public class ProductController {
 		}
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/admin/product/{id}")
 	public ResponseEntity<?> update(@PathVariable Integer id, @RequestParam(required = false) String name,
 			@RequestParam(required = false) Integer quantity, @RequestParam(required = false) Double unitPrice,
 			@RequestParam(required = false) String description, @RequestParam(required = false) Integer discount,
-			@RequestParam(required = false) Integer categoryId, @RequestParam(required = false) MultipartFile thumb,
+			@RequestParam(required = false) Integer categoryId,
+			@RequestParam(required = false) Boolean status, 
+			@RequestParam(required = false) Integer sold,@RequestParam(required = false) MultipartFile thumb,
 			@RequestParam(required = false) List<MultipartFile> images) {
 
 		try {
@@ -133,8 +159,12 @@ public class ProductController {
 				product.setQuantity(quantity);
 			if (unitPrice != null)
 				product.setUnitPrice(unitPrice);
+			if (sold != null)
+				product.setSold(sold);
 			if (description != null)
 				product.setDescription(description);
+			if (status != null)
+				product.setStatus(status);
 			if (discount != null)
 				product.setDiscount(discount);
 			if (categoryId != null) {
@@ -161,7 +191,7 @@ public class ProductController {
 		}
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/admin/product/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		try {
 			if (!productDAO.existsById(id)) {

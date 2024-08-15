@@ -65,7 +65,7 @@ public class CartController {
 		return cartDao.findByUserUserId(customerId);
 	}
 
-	@PostMapping("/add")
+	@PostMapping
 	public ResponseEntity<String> addCartItem(@RequestBody CartItem cartItem) {
 		List<CartItem> item = (List<CartItem>) cartDao.findByProductAndUser(cartItem.getProduct(),
 				cartItem.getUser());

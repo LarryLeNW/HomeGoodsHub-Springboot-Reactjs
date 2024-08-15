@@ -8,8 +8,6 @@ import com.backend.entity.Role;
 
 public interface RoleDAO extends JpaRepository<Role, Integer> {
 	Page<Role> findAllByNameLike(String keywords, Pageable pageable);
-	
-	Role findByName(String name); 
 
-
+	Role findByName(String name);
 }

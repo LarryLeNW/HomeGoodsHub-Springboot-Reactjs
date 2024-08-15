@@ -175,7 +175,14 @@ public class AuthController {
 			if (foundUser.isPresent()) {
 				return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Email đã có người sử dụng...");
 			}
-
+			
+			Role roleDefault = roleDAO.findByName("USER");
+				
+			if(roleDefault != null) {
+				user.setRole(roleDefault);
+			}
+			
+			
 			User item = UserDAO.save(user);
 			return ResponseEntity.ok(item);
 		} catch (Exception e) {

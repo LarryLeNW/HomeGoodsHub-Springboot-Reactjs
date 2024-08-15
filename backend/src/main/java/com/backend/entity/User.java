@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.backend.dao.RoleDAO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,6 +30,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -40,7 +44,8 @@ import jakarta.persistence.Transient;
 @Table(name = "users")
 @ToString(exclude = {"roles", "orders"})
 public class User implements Serializable {
-
+	
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
@@ -50,6 +55,9 @@ public class User implements Serializable {
     private String password;
     private String avatar ;
     private String phone;
+    
+    private String status; 
+    private String address; 
 
     @CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
@@ -69,12 +77,16 @@ public class User implements Serializable {
     @JsonManagedReference
     @OneToMany(mappedBy = "user")
     private List<Orders> orders;
-    
 
+    @PrePersist
+    protected void onCreate() {
+        if (status == null) {
+            status = "active";
+        }
+       
+    }
     
-    
-    
-    
+  
     
    
 }

@@ -29,16 +29,16 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer productId;
 
-	@Column(length = 500)
+    @Column(name = "name", columnDefinition = "NVARCHAR(255)")
 	private String name;
 
-	@Column(length = 1000) 
+    @Column(name = "images", columnDefinition = "NVARCHAR(255)")
 	private String images;
 
-	@Column(length = 500) 
+    @Column(name = "thumb", columnDefinition = "NVARCHAR(255)")
 	private String thumb;
 
-	@Column(length = 2000) 
+    @Column(name = "description", columnDefinition = "NVARCHAR(255)")
 	private String description;
 
 	private Integer quantity;

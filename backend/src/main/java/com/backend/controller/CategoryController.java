@@ -100,6 +100,11 @@ public class CategoryController {
             if (!categoryDao.existsById(id)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found with id: " + id);
             }
+            
+            	
+            
+            
+            
 
             // Xóa category
             categoryDao.deleteById(id);

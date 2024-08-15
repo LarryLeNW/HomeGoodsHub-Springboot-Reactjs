@@ -26,17 +26,18 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "roles")
 public class Role {
 	
-	public Role(String name) {
-		super();
-		this.name = name;
-	}
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,9 +55,8 @@ public class Role {
 	@Column(name = "updatedAt")
 	private Date updatedAt;
 
-	public Role orElseThrow(Object object) {
-		return null;
-	}
+	
+
 
 	
 	

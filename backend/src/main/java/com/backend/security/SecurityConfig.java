@@ -36,7 +36,7 @@ public class SecurityConfig {
 	private UnAuthorizedUserAuthenticationEntryPoint authenticationEntryPoint;
 
 	@Autowired
-	private SecurityFilter secFilter;
+	private SecurityFilter securityFilter;
 
 	// Required in case of Stateless Authentication
 	@Bean
@@ -51,18 +51,14 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	    http
-	        .csrf().disable() // Tắt CSRF vì không sử dụng đăng nhập dựa trên form
-	        .authorizeHttpRequests()
-	        .requestMatchers("/**").permitAll()
-	        .anyRequest().permitAll()
-	        .and()
-	        .exceptionHandling()
-	        .authenticationEntryPoint(authenticationEntryPoint)
-	        .and()
-	        .sessionManagement()
-	        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-	        .and()
-	        .addFilterBefore(secFilter, UsernamePasswordAuthenticationFilter.class);
+	        .csrf().disable()
+	        .authorizeRequests()
+	        .requestMatchers("/api/**").permitAll();
+//	        .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
+//	        .requestMatchers("/api/user/**").hasAuthority("USER")
+//	        .anyRequest().permitAll();
+//	    .and()
+//	    .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
 	    return http.build();
 	}

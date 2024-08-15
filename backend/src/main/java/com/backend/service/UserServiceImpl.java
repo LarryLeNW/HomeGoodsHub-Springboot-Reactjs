@@ -51,11 +51,9 @@ public class UserServiceImpl implements IUserService,UserDetailsService {
         }
 
         User customer = opt.get(); // Lấy thông tin người dùng từ DB
-        List<Role> roles = (List<Role>) customer.getRole();
+		Role role = customer.getRole();
         Set<GrantedAuthority> authorities = new HashSet<>();
-        for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getName())); 
-        }
 
         return new org.springframework.security.core.userdetails.User(
         		email,
