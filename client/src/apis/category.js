@@ -17,13 +17,13 @@ export const createCategory = (data) =>
 
 export const updateCategory = (cid, data) =>
     axios({
-        url: "/category" + cid,
+        url: "/category/" + cid,
         method: "put",
         data,
     });
 
 export const deleteCategory = (cid) =>
     axios({
-        url: "/category" + cid,
+        url: "/category/" + cid,
         method: "delete",
     });

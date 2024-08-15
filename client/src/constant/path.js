@@ -14,7 +14,7 @@ const paths = {
     DETAIL_BLOG: "/blog/:id/:category",
     DETAIL_CART: "detail-cart",
     ADMIN: {
-        HOME: "/admin/dashboard",
+        HOME: "/admin/user-management",
         USER_MANAGEMENT: "/admin/user-management",
         ORDER_MANAGEMENT: "/admin/order-management",
         UPDATE_ORDER: "/admin/update-order",

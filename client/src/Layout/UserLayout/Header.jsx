@@ -16,21 +16,22 @@ import { Badge } from "antd";
 // import { logoutRequest } from "redux/slicers/auth.slicer";
 import Button from "components/Form/Button";
 import withBaseComponent from "hocs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthStore } from "store/auth.store";
-import { logout } from "apis";
+import { getProducts, logout } from "apis";
+import useDebounce from "hooks/useDebounce";
 
 function Header({ navigate }) {
     const { userInfo } = useAuthStore();
-    console.log("🚀 ~ Header ~ userInfo:", userInfo);
 
     const [isShowMenuMember, setIsShowMenuMember] = useState(false);
     const [isModalSearch, setIsModalSearch] = useState(false);
-    const [dataSearch, setDataSearch] = useState("");
-    const [keyword, setKeyword] = useState("");
+    const [dataSearch, setDataSearch] = useState([]);
+    console.log("🚀 ~ Header ~ dataSearch:", dataSearch);
+    const [keywords, setKeyword] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // const keywordDebounce = useDebounce(keyword, 500);
+    const keywordDebounce = useDebounce(keywords, 500);
     const menuRef = useClickOutside(() => {
         setIsShowMenuMember(false);
     });
@@ -40,22 +41,26 @@ function Header({ navigate }) {
 
     const { logoutRequest } = useAuthStore();
 
-    // useEffect(() => {
-    //   const fetchProduct = async () => {
-    //     setLoading(true);
-    //     const response = await getProducts({ keyword, limit: 5 });
-    //     setDataSearch(response?.data);
-    //     setLoading(false);
-    //     if (response?.data.length > 0) {
-    //       setIsModalSearch(true);
-    //     }
-    //   };
-    //   if (keyword) fetchProduct();
-    //   else {
-    //     setDataSearch([]);
-    //     setIsModalSearch(false);
-    //   }
-    // }, [keywordDebounce]);
+    useEffect(() => {
+        const fetchProduct = async () => {
+            setLoading(true);
+            try {
+                const response = await getProducts({ keywords, limit: 5 });
+                setDataSearch(response.content);
+                setLoading(false);
+                if (response.content.length > 0) {
+                    setIsModalSearch(true);
+                }
+            } catch (error) {
+                console.log("🚀 ~ fetchProduct ~ error:", error);
+            }
+        };
+        if (keywords) fetchProduct();
+        else {
+            setDataSearch([]);
+            setIsModalSearch(false);
+        }
+    }, [keywordDebounce]);
 
     return (
         <div className="w-main  flex justify-between mt-[48px] items-center h-[110px] py-[35px] select-none">
@@ -71,7 +76,7 @@ function Header({ navigate }) {
                     type="text"
                     placeholder="Bạn tìm kiếm gì hôm nay ?"
                     className="flex-1 outline-none"
-                    value={keyword}
+                    value={keywords}
                     onChange={(e) => setKeyword(e.target.value)}
                 />
                 <div className="px-2 border-l-2">
@@ -95,13 +100,13 @@ function Header({ navigate }) {
                         <div>
                             {dataSearch.map((product) => (
                                 <Link
-                                    key={product._id}
+                                    key={product.productId}
                                     className="flex  gap-2 hover:bg-gray-100 px-2 py-2 cursor-pointer"
                                     to={generatePath(paths.DETAIL_PRODUCT, {
                                         category:
-                                            product?.category.toLowerCase(),
-                                        title: product?.title,
-                                        id: product?._id,
+                                            product?.category.name.toLowerCase(),
+                                        title: product?.name,
+                                        id: product?.productId,
                                     })}
                                     onClick={() => setIsModalSearch(false)}
                                 >
@@ -112,10 +117,10 @@ function Header({ navigate }) {
                                     />
                                     <div className="flex flex-col">
                                         <h1 className="font-bold text-sm">
-                                            {product.title}
+                                            {product.name}
                                         </h1>
                                         <span className="text-gray-500 text-sm">
-                                            {product.price.toLocaleString(
+                                            {product.unitPrice.toLocaleString(
                                                 "vi-VN"
                                             )}{" "}
                                             VNĐ
@@ -124,12 +129,13 @@ function Header({ navigate }) {
                                             Còn : {product.quantity} cái
                                         </span>
                                         <span className="flex h-4">
-                                            {renderStars(
-                                                product?.totalRatings,
-                                                14
-                                            ).map((el, index) => (
-                                                <span key={index}>{el}</span>
-                                            ))}
+                                            {renderStars(5, 14).map(
+                                                (el, index) => (
+                                                    <span key={index}>
+                                                        {el}
+                                                    </span>
+                                                )
+                                            )}
                                         </span>
                                     </div>
                                 </Link>

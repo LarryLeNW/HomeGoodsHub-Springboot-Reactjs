@@ -2,6 +2,7 @@ import { notification } from "antd";
 import { getUserInfo, login, logout, register } from "apis";
 import paths from "constant/path";
 import { create } from "zustand";
+import { useCommonStore } from "./common.store";
 
 const showNotification = (type, message) => {
     notification[type]({
@@ -9,6 +10,8 @@ const showNotification = (type, message) => {
         duration: 1,
     });
 };
+
+const { showModal } = useCommonStore.getState();
 
 export const useAuthStore = create((set) => ({
     userInfo: {
@@ -24,7 +27,9 @@ export const useAuthStore = create((set) => ({
         isLoading: false,
         error: null,
     },
-    fetchUserInfo: async () => {
+    fetchUserInfo: async (navigate) => {
+        showModal({ isShowModal: true });
+
         set(() => ({
             userInfo: {
                 isLoading: true,
@@ -41,6 +46,9 @@ export const useAuthStore = create((set) => ({
                 },
             }));
             showNotification("success", `Chào mừng ${response.username}`);
+            navigate(
+                response.role.name == "ADMIN" ? paths.ADMIN.HOME : paths.HOME
+            );
         } catch (error) {
             set(() => ({
                 userInfo: {
@@ -49,6 +57,8 @@ export const useAuthStore = create((set) => ({
                 },
             }));
         }
+
+        showModal({ isShowModal: false });
     },
     registerRequest: async (dataPayload, navigate) => {
         set(() => ({
@@ -102,7 +112,9 @@ export const useAuthStore = create((set) => ({
                 },
             }));
             showNotification("success", "Đăng nhập thành công.");
-            navigate(paths.HOME);
+            navigate(
+                response.role.name == "ADMIN" ? paths.ADMIN.HOME : paths.HOME
+            );
         } catch (error) {
             console.log("🚀 ~ loginRequest: ~ error:", error);
             set(() => ({

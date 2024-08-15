@@ -2,12 +2,11 @@ import axios from "config/axios";
 
 export const getProducts = (params) =>
     axios({
-        url: "/product/",
+        url: "/product",
         method: "get",
         params,
     });
 
-// not used
 export const getProduct = (id) => {
     return axios({
         url: "/product/" + id,
@@ -17,32 +16,24 @@ export const getProduct = (id) => {
 
 export const createProduct = (data) => {
     return axios({
-        url: "/product/",
+        url: "/admin/product",
         method: "post",
         data,
     });
 };
 
+export const deleteProduct = (pid) => {
+    return axios({
+        url: "/admin/product/" + pid,
+        method: "delete",
+    });
+};
+
 export const updateProduct = (pid, data) => {
     return axios({
-        url: "/product/" + pid,
+        url: "/admin/product/" + pid,
         method: "put",
         data,
-    });
-};
-
-export const createVariant = (pid, data) => {
-    return axios({
-        url: "/product/" + pid + "/variant",
-        method: "put",
-        data,
-    });
-};
-
-export const deleteVariant = (pid, vid) => {
-    return axios({
-        url: "/product/" + pid + "/variant/" + vid,
-        method: "delete",
     });
 };
 
@@ -59,12 +50,5 @@ export const getReview = (params) => {
         url: "/review",
         method: "get",
         params,
-    });
-};
-
-export const deleteProduct = (pid) => {
-    return axios({
-        url: "/product/" + pid,
-        method: "delete",
     });
 };

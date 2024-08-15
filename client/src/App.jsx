@@ -3,17 +3,25 @@ import "./App.css";
 import paths from "constant/path";
 import Modal from "components/Modal";
 import UserLayout from "layout/UserLayout";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { AuthPage, HomePage } from "pages/user";
 import { useEffect } from "react";
 import { useAuthStore } from "store/auth.store";
+import { useCommonStore } from "store/common.store";
+import AdminLayout from "layout/AdminLayout";
+import {
+    ProductCategoryPage,
+    ProductManagerPage,
+    UpdateProductPage,
+    UserManagerPage,
+} from "pages/admin";
 
 function App() {
-    // const { modal } = {};
+    const navigate = useNavigate();
     const { fetchUserInfo } = useAuthStore();
 
     useEffect(() => {
-        fetchUserInfo();
+        fetchUserInfo(navigate);
     }, []);
 
     return (
@@ -69,10 +77,10 @@ function App() {
                         element={<div>WhiteListPage</div>}
                     />
                 </Route>
-                <Route element={<div>AdminLayout</div>}>
+                <Route element={<AdminLayout />}>
                     <Route
                         path={paths.ADMIN.HOME}
-                        element={<div>UserManagerPage</div>}
+                        element={<UserManagerPage />}
                     />
                     <Route
                         path={paths.ADMIN.ORDER_MANAGEMENT}
@@ -84,15 +92,15 @@ function App() {
                     />
                     <Route
                         path={paths.ADMIN.PRODUCT_CATEGORY_MANAGEMENT}
-                        element={<div>ProductCategoryPage</div>}
+                        element={<ProductCategoryPage />}
                     />
                     <Route
                         path={paths.ADMIN.PRODUCT_MANAGEMENT}
-                        element={<div>ProductManagerPage</div>}
+                        element={<ProductManagerPage />}
                     />
                     <Route
                         path={paths.ADMIN.UPDATE_PRODUCT}
-                        element={<div>UpdateProductPage</div>}
+                        element={<UpdateProductPage />}
                     />
                     <Route
                         path={paths.ADMIN.USER_MANAGEMENT}
@@ -133,11 +141,7 @@ function App() {
                     element={<div>ShowBillPage</div>}
                 />
             </Routes>
-            {/* {(modal.isShow || userInfo.loading) && (
-                <Modal isAction={modal.isAction}>
-                    {modal.children || <Loading />}
-                </Modal>
-            )} */}
+            <Modal />
         </div>
     );
 }

@@ -1,18 +1,25 @@
 import withBaseComponent from "hocs";
 import Sidebar from "./Sidebar";
 import DealList from "./DealList";
+import SlideBanner from "./SlideBanner";
+import NewProductList from "./NewProductList";
 
 function Home() {
     return (
         <div className="w-main mx-auto ">
-            <div className="w-main flex mt-2  ">
+            <div className="w-main flex mt-2  h-600px ">
+                <div className="flex flex-col gap-5 pl-5 w-[75%] flex-auto ">
+                    <SlideBanner />
+                </div>
                 <div className="flex flex-col gap-5 w-[25%] flex-auto ">
                     <Sidebar />
-                    {/* <DealDaily /> */}
                 </div>
-                <div className="flex flex-col gap-5 pl-5 w-[75%] flex-auto ">
-                    <DealList />
-                </div>
+            </div>
+            <div className="my-2">
+                <DealList />
+            </div>
+            <div className="my-2">
+                <NewProductList />
             </div>
             {/* <div className="my-8 mx-auto"> */}
             {/* <FeatureProducts /> */}

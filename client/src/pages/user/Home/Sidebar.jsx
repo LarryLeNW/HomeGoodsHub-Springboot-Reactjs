@@ -23,10 +23,10 @@ function Sidebar() {
     }, []);
 
     return (
-        <div className="flex flex-col border rounded">
+        <div className="flex flex-col border rounded h-full overflow-auto">
             <div className="px-5 pt-[15px] pb-[14px] bg-main text-white flex gap-1  items-center ">
                 <ICONS.AiOutlineMenu />
-                <span> DANH SÁCH DANH MỤC</span>
+                <span>DANH MỤC SẢN PHẨM</span>
             </div>
 
             {data.map((cate, index) => (
