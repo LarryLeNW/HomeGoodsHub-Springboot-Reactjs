@@ -53,12 +53,9 @@ public class SecurityConfig {
 	    http
 	        .csrf().disable()
 	        .authorizeRequests()
-	        .requestMatchers("/api/**").permitAll();
-//	        .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
-//	        .requestMatchers("/api/user/**").hasAuthority("USER")
-//	        .anyRequest().permitAll();
-//	    .and()
-//	    .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+	        .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
+	        .requestMatchers("/api/user/**").hasAuthority("USER")
+	        .anyRequest().permitAll();
 
 	    return http.build();
 	}

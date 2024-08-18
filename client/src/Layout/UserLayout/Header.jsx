@@ -5,29 +5,24 @@ import { useClickOutside } from "hooks/useClickOutside";
 import { renderStars } from "utils/helper";
 import ICONS from "utils/icons";
 import { Badge } from "antd";
-
-// import { useEffect, useState } from "react";
-// import { useClickOutside } from "hooks/useClickOutside";
-// import withBaseComponent from "hocs";
-// import { showModal } from "redux/slicers/common.slicer";
-// import CartReview from "components/CartReview";
-// import useDebounce from "hooks/useDebounce";
-// import { getProducts } from "apis/product";
-// import { logoutRequest } from "redux/slicers/auth.slicer";
+import CartReview from "components/CartReview";
 import Button from "components/Form/Button";
 import withBaseComponent from "hocs";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "store/auth.store";
 import { getProducts, logout } from "apis";
 import useDebounce from "hooks/useDebounce";
+import { useCartStore } from "store/cart.store";
+import { useCommonStore } from "store/common.store";
 
 function Header({ navigate }) {
     const { userInfo } = useAuthStore();
+    const { fetchCarts, cart } = useCartStore();
+    const { showModal } = useCommonStore();
 
     const [isShowMenuMember, setIsShowMenuMember] = useState(false);
     const [isModalSearch, setIsModalSearch] = useState(false);
     const [dataSearch, setDataSearch] = useState([]);
-    console.log("🚀 ~ Header ~ dataSearch:", dataSearch);
     const [keywords, setKeyword] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -40,6 +35,12 @@ function Header({ navigate }) {
     });
 
     const { logoutRequest } = useAuthStore();
+
+    useEffect(() => {
+        if (userInfo.data) {
+            fetchCarts(userInfo.data.userId);
+        }
+    }, [userInfo.data?.userId]);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -148,18 +149,16 @@ function Header({ navigate }) {
             {userInfo?.data ? (
                 <div className="flex text-[13px] gap-4">
                     <div
-                        className="flex items-center justify-center gap-2 border-r px-6 cursor-pointer"
-                        // onClick={() =>
-                        //     dispatch(
-                        //         showModal({
-                        //             children: <CartReview />,
-                        //             isShowModal: true,
-                        //         })
-                        //     )
-                        // }
+                        className="flex items-center justify-center gap-2 border-r px-6 cursor-pointer border"
+                        onClick={() =>
+                            showModal({
+                                children: <CartReview />,
+                                isShowModal: true,
+                            })
+                        }
                     >
+                        <Badge count={cart.data.length || 0}></Badge>
                         <ICONS.LuBaggageClaim />
-                        <Badge count={0}></Badge>
                     </div>
                     <div
                         className="flex items-center justify-center px-4 relative"

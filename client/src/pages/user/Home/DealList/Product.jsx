@@ -6,7 +6,7 @@ import { formatMoney, renderStars } from "utils/helper";
 import { generatePath } from "react-router-dom";
 import withBaseComponent from "hocs";
 // import { showModal } from "redux/slicers/common.slicer";
-// import QuickViewProduct from "components/Modal/QuickViewProduct";
+import QuickViewProduct from "components/Modal/QuickViewProduct";
 // import { updateCartRequest } from "redux/slicers/auth.slicer";
 import { notification } from "antd";
 import paths from "constant/path";
@@ -26,57 +26,34 @@ function Product({
     const [isShowOption, setShowOption] = useState(false);
     const { userInfo } = useAuthStore();
     const { showModal } = useCommonStore();
-    const { addCartRequest } = useCartStore();
+    const { addCartRequest, fetchCarts } = useCartStore();
 
     const handleClickOptions = (e, type) => {
         e.stopPropagation();
-        // switch (type) {
-        //     case "AddCart":
-        //         checkLoginBeforeAction(() =>
-        //             dispatch(
-        //                 updateCartRequest({
-        //                     data: {
-        //                         pid: data?._id,
-        //                         title: data?.title,
-        //                         quantity: 1,
-        //                         price: data?.price,
-        //                         color: data?.color,
-        //                         thumb: data?.thumb,
-        //                     },
-        //                     callback: () => {
-        //                         notification.success({
-        //                             message: `Cập nhật ${data?.title} vào giỏ hàng thành công ...`,
-        //                             duration: 1,
-        //                         });
-        //                     },
-        //                 })
-        //             )
-        //         );
-        //         break;
-        //     case "QuickView":
-        //         dispatch(
-        //             showModal({
-        //                 isShowModal: true,
-        //                 children: <QuickViewProduct productData={data} />,
-        //             })
-        //         );
-        //         console.log("QuickView");
-        //         break;
-        //     case "WishList":
-        //         console.log("WishList");
-        //         break;
-        // }
-    };
-
-    const handleAddCart = async () => {
-        if (!userInfo.data) {
-            notification.warning({
-                message: "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.",
-                duration: 1,
-            });
-            return;
+        switch (type) {
+            case "AddCart":
+                if (!userInfo.data) {
+                    notification.warning({
+                        message:
+                            "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.",
+                        duration: 1,
+                    });
+                    return;
+                }
+                addCartRequest(data.productId, userInfo.data.userId, 1, () => {
+                    fetchCarts(userInfo.data?.userId);
+                });
+                break;
+            case "QuickView":
+                showModal({
+                    isShowModal: true,
+                    children: <QuickViewProduct productData={data} />,
+                });
+                break;
+            case "WishList":
+                console.log("WishList");
+                break;
         }
-        addCartRequest(data.productId, userInfo.data.userId, 1);
     };
 
     return (
@@ -94,9 +71,9 @@ function Product({
                 onClick={() =>
                     navigate(
                         generatePath(paths.DETAIL_PRODUCT, {
-                            category: data?.categoryId,
+                            category: data?.category.name,
+                            id: data?.productId,
                             title: data?.name,
-                            id: data?.id,
                         })
                     )
                 }
@@ -125,9 +102,7 @@ function Product({
                                         // ) ? (
                                         // <ICONS.BsFillCartCheckFill color="green" />
                                         // ) : (
-                                        <ICONS.FaCartArrowDown
-                                            onClick={handleAddCart}
-                                        />
+                                        <ICONS.FaCartArrowDown />
                                         // )
                                     }
                                 />

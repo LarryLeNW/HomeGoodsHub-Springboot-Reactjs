@@ -1,6 +1,6 @@
 import paths from "constant/path";
 import ICONS from "utils/icons";
-import path from "utils/path";
+import path from "constant/path";
 
 export const menuAdminSidebar = [
     // {
@@ -41,29 +41,6 @@ export const menuAdminSidebar = [
         ],
     },
     {
-        id: 4,
-        type: "PARENT",
-        text: "Blog Management",
-        icon: <ICONS.TbPackages />,
-        submenu: [
-            {
-                id: 1,
-                text: "Categories",
-                path: paths.ADMIN.BLOG_CATEGORY_MANAGEMENT,
-            },
-            {
-                id: 2,
-                text: "List",
-                path: paths.ADMIN.BLOG_MANAGEMENT,
-            },
-            {
-                id: 2,
-                text: "Create Quickly",
-                path: paths.ADMIN.UPDATE_BLOG,
-            },
-        ],
-    },
-    {
         id: 5,
         type: "PARENT",
         text: "Order Manager",
@@ -73,11 +50,6 @@ export const menuAdminSidebar = [
                 id: 1,
                 text: "List",
                 path: paths.ADMIN.ORDER_MANAGEMENT,
-            },
-            {
-                id: 2,
-                text: "Create Quickly",
-                path: paths.ADMIN.UPDATE_ORDER,
             },
         ],
     },

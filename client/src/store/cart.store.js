@@ -1,9 +1,7 @@
 import { notification } from "antd";
-import { getUserInfo, login, logout, register } from "apis";
-import paths from "constant/path";
+import { addCart, getCarts, removeCart, updateQuantity } from "apis/cart";
 import { create } from "zustand";
 import { useCommonStore } from "./common.store";
-import { addCart } from "apis/cart";
 
 const showNotification = (type, message) => {
     notification[type]({
@@ -14,13 +12,13 @@ const showNotification = (type, message) => {
 
 const { showModal } = useCommonStore.getState();
 
-export const useCartStore = create((set) => ({
+export const useCartStore = create((set, get) => ({
     cart: {
-        data: null,
+        data: [],
         isLoading: false,
         error: null,
     },
-    addCartRequest: async (productId, userId, quantity) => {
+    addCartRequest: async (productId, userId, quantity, callback) => {
         showModal({ isShowModal: true });
         try {
             const response = await addCart({
@@ -28,10 +26,80 @@ export const useCartStore = create((set) => ({
                 quantity,
                 user: { userId },
             });
+            callback();
             showNotification("success", response);
         } catch (error) {
             showNotification("error", "Failed to add to cart");
+        } finally {
+            showModal({ isShowModal: false });
         }
-        showModal({ isShowModal: false });
+    },
+    updateQuantityRequest: async (data, callback) => {
+        showModal({ isShowModal: true });
+        try {
+            const response = await updateQuantity(data, callback);
+            callback();
+            showNotification("success", response);
+        } catch (error) {
+            showNotification("error", "Failed to add to cart");
+        } finally {
+            showModal({ isShowModal: false });
+        }
+    },
+    fetchCarts: async (uid) => {
+        set((state) => ({
+            cart: {
+                ...state.cart,
+                isLoading: true,
+                error: null,
+            },
+        }));
+        try {
+            const response = await getCarts(uid);
+            set((state) => ({
+                cart: {
+                    data: response,
+                    isLoading: false,
+                    error: null,
+                },
+            }));
+        } catch (error) {
+            set((state) => ({
+                cart: {
+                    ...state.cart,
+                    isLoading: false,
+                    error,
+                },
+            }));
+        }
+    },
+    deleteCartRequest: async (cid, callback) => {
+        set((state) => ({
+            cart: {
+                ...state.cart,
+                isLoading: true,
+                error: null,
+            },
+        }));
+        try {
+            await removeCart(cid);
+            set((state) => ({
+                cart: {
+                    ...state.cart,
+                    isLoading: false,
+                    error: null,
+                },
+            }));
+            await callback();
+            showNotification("success", "Item removed from cart");
+        } catch (error) {
+            set((state) => ({
+                cart: {
+                    ...state.cart,
+                    isLoading: false,
+                    error,
+                },
+            }));
+        }
     },
 }));

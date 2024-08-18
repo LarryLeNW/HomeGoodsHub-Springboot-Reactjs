@@ -59,10 +59,13 @@ public class CartController {
 		return cartDao.findAll();
 	}
 
-	@GetMapping("/customer")
-	public List<CartItem> getCartByCustomer(@RequestParam Integer customerId) {
-		System.out.println("đây là customercart: " + cartDao.findByUserUserId(customerId));
-		return cartDao.findByUserUserId(customerId);
+	@GetMapping("/{userId}")
+	public ResponseEntity<?> getCartByCustomer(@PathVariable Integer userId) {
+		try {
+			return ResponseEntity.ok(cartDao.findByUserUserId(userId));  
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 
 	@PostMapping
@@ -106,7 +109,7 @@ public class CartController {
 		cartDao.save(cartItem);
 	}
 
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/{id}")
 	public void removeCartItem(@PathVariable("id") Integer id) {
 		cartDao.deleteById(id);
 	}

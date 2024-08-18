@@ -11,9 +11,7 @@ const showNotification = (type, message) => {
     });
 };
 
-const { showModal } = useCommonStore.getState();
-
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
     userInfo: {
         data: null,
         isLoading: false,
@@ -28,17 +26,20 @@ export const useAuthStore = create((set) => ({
         error: null,
     },
     fetchUserInfo: async (navigate) => {
+        const { showModal } = useCommonStore.getState();
         showModal({ isShowModal: true });
 
-        set(() => ({
+        set((state) => ({
             userInfo: {
+                ...state.userInfo,
                 isLoading: true,
                 error: null,
             },
         }));
+
         try {
             const response = await getUserInfo();
-            set(() => ({
+            set((state) => ({
                 userInfo: {
                     data: response,
                     isLoading: false,
@@ -47,29 +48,30 @@ export const useAuthStore = create((set) => ({
             }));
             showNotification("success", `Chào mừng ${response.username}`);
             navigate(
-                response.role.name == "ADMIN" ? paths.ADMIN.HOME : paths.HOME
+                response.role.name === "ADMIN" ? paths.ADMIN.HOME : paths.HOME
             );
         } catch (error) {
-            set(() => ({
+            set((state) => ({
                 userInfo: {
                     isLoading: false,
                     error: error.message,
                 },
             }));
+        } finally {
+            showModal({ isShowModal: false });
         }
-
-        showModal({ isShowModal: false });
     },
     registerRequest: async (dataPayload, navigate) => {
-        set(() => ({
+        set((state) => ({
             dataRegister: {
                 isLoading: true,
                 error: null,
             },
         }));
+
         try {
             const response = await register(dataPayload);
-            set(() => ({
+            set((state) => ({
                 userInfo: {
                     data: response,
                 },
@@ -81,26 +83,27 @@ export const useAuthStore = create((set) => ({
             showNotification("success", "Đăng kí thành công.");
             navigate(paths.HOME);
         } catch (error) {
-            console.log("🚀 ~ loginRequest: ~ error:", error);
-            set(() => ({
+            console.log("🚀 ~ registerRequest: ~ error:", error);
+            set((state) => ({
                 dataRegister: {
                     isLoading: false,
-                    error: error?.response?.data,
+                    error: error?.response?.data || error.message,
                 },
             }));
-            showNotification("error", error?.response?.data);
+            showNotification("error", error?.response?.data || "Đã xảy ra lỗi");
         }
     },
     loginRequest: async (dataPayload, navigate) => {
-        set(() => ({
+        set((state) => ({
             dataLogin: {
                 isLoading: true,
                 error: null,
             },
         }));
+
         try {
             const response = await login(dataPayload);
-            set(() => ({
+            set((state) => ({
                 userInfo: {
                     data: response,
                     isLoading: false,
@@ -113,14 +116,14 @@ export const useAuthStore = create((set) => ({
             }));
             showNotification("success", "Đăng nhập thành công.");
             navigate(
-                response.role.name == "ADMIN" ? paths.ADMIN.HOME : paths.HOME
+                response.role.name === "ADMIN" ? paths.ADMIN.HOME : paths.HOME
             );
         } catch (error) {
             console.log("🚀 ~ loginRequest: ~ error:", error);
-            set(() => ({
+            set((state) => ({
                 dataLogin: {
                     isLoading: false,
-                    error: error.message,
+                    error: error?.message || "Tài khoản hoặc mật khẩu sai",
                 },
             }));
             showNotification("error", "Tài khoản hoặc mật khẩu sai");
@@ -129,7 +132,7 @@ export const useAuthStore = create((set) => ({
     logoutRequest: async () => {
         try {
             await logout();
-            set(() => ({
+            set((state) => ({
                 userInfo: {
                     data: null,
                 },
@@ -137,7 +140,7 @@ export const useAuthStore = create((set) => ({
             showNotification("success", "Đăng xuất thành công.");
         } catch (error) {
             console.log("🚀 ~ logoutRequest: ~ error:", error);
-            showNotification("error", "Something went wrong");
+            showNotification("error", "Đã xảy ra lỗi khi đăng xuất.");
         }
     },
 }));

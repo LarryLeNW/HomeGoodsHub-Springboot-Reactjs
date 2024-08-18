@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 // import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import path from "utils/path";
+import path from "constant/path";
 
 const withBaseComponent = (Component) => (props) => {
     // const { isLogged } = useSelector((state) => state.auth);

@@ -38,7 +38,7 @@ public class Product {
     @Column(name = "thumb", columnDefinition = "NVARCHAR(255)")
 	private String thumb;
 
-    @Column(name = "description", columnDefinition = "NVARCHAR(255)")
+    @Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 
 	private Integer quantity;

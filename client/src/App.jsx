@@ -1,20 +1,22 @@
-import logo from "./logo.svg";
-import "./App.css";
-import paths from "constant/path";
 import Modal from "components/Modal";
-import UserLayout from "layout/UserLayout";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import { AuthPage, HomePage } from "pages/user";
-import { useEffect } from "react";
-import { useAuthStore } from "store/auth.store";
-import { useCommonStore } from "store/common.store";
+import paths from "constant/path";
 import AdminLayout from "layout/AdminLayout";
+import MemberLayout from "layout/MemberLayout";
+import UserLayout from "layout/UserLayout";
 import {
+    OrderManagerPage,
     ProductCategoryPage,
     ProductManagerPage,
     UpdateProductPage,
     UserManagerPage,
 } from "pages/admin";
+import { CheckoutPage, HistoryPage, ProfilePage } from "pages/member";
+import { AuthPage, DetailCartPage, HomePage } from "pages/user";
+import { useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useAuthStore } from "store/auth.store";
+import "./App.css";
+import DetailProduct from "pages/user/DetailProduct";
 
 function App() {
     const navigate = useNavigate();
@@ -31,15 +33,11 @@ function App() {
                     <Route index element={<HomePage />} />
                     <Route
                         path={paths.DETAIL_CART}
-                        element={<div>DetailCartPage</div>}
-                    />
-                    <Route
-                        path={paths.BLOGS}
-                        element={<div> ListBlogsPage </div>}
+                        element={<DetailCartPage />}
                     />
                     <Route
                         path={paths.DETAIL_PRODUCT}
-                        element={<div>DetailProduct</div>}
+                        element={<DetailProduct />}
                     />
                     <Route
                         path={paths.OUR_SERVICES}
@@ -51,26 +49,18 @@ function App() {
                         element={<div> ListProductPage</div>}
                     />
                     <Route
-                        path={paths.DETAIL_BLOG}
-                        element={<div>DetailBlogPage</div>}
-                    />
-                    <Route
                         path={paths.INTRODUCE}
                         element={<div>IntroducePage</div>}
                     />
                 </Route>
-                <Route element={<div> MemberLayout</div>}>
+                <Route element={<MemberLayout />}>
                     <Route
                         path={paths.MEMBER.PROFILE}
-                        element={<div>ProfilePage</div>}
-                    />
-                    <Route
-                        path={paths.MEMBER.MY_CART}
-                        element={<div>ListCartPage</div>}
+                        element={<ProfilePage />}
                     />
                     <Route
                         path={paths.MEMBER.HISTORY}
-                        element={<div>HistoryPage</div>}
+                        element={<HistoryPage />}
                     />
                     <Route
                         path={paths.MEMBER.WISH_LIST}
@@ -84,12 +74,9 @@ function App() {
                     />
                     <Route
                         path={paths.ADMIN.ORDER_MANAGEMENT}
-                        element={<div>OrderManagerPage</div>}
+                        element={<OrderManagerPage />}
                     />
-                    <Route
-                        path={paths.ADMIN.UPDATE_ORDER}
-                        element={<div>UpdateOrderPage</div>}
-                    />
+
                     <Route
                         path={paths.ADMIN.PRODUCT_CATEGORY_MANAGEMENT}
                         element={<ProductCategoryPage />}
@@ -104,29 +91,13 @@ function App() {
                     />
                     <Route
                         path={paths.ADMIN.USER_MANAGEMENT}
-                        element={<div>UserManagerPage</div>}
-                    />
-                    <Route
-                        path={paths.ADMIN.VARIANT_MANAGEMENT}
-                        element={<div>VariantProductPage</div>}
-                    />
-                    <Route
-                        path={paths.ADMIN.BLOG_MANAGEMENT}
-                        element={<div>BlogManagerPage</div>}
-                    />
-                    <Route
-                        path={paths.ADMIN.BLOG_CATEGORY_MANAGEMENT}
-                        element={<div>BlogCategoryManagerPage</div>}
-                    />
-                    <Route
-                        path={paths.ADMIN.UPDATE_BLOG}
-                        element={<div>UpdateBlogPage</div>}
+                        element={<UserManagerPage />}
                     />
                 </Route>
                 <Route path={paths.LOGIN} element={<AuthPage />} />
                 <Route
                     path={paths.MEMBER.CHECKOUT}
-                    element={<div>CheckoutPage</div>}
+                    element={<CheckoutPage />}
                 />
                 <Route
                     path={paths.FORGOT_PASSWORD}

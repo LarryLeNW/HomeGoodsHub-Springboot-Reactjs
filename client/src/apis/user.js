@@ -14,9 +14,9 @@ export const updateUser = (uid, data) =>
         data,
     });
 
-export const changeAvatar = (data) =>
+export const changeAvatar = (uid, data) =>
     axios({
-        url: "/user/changeAvatar/",
+        url: "/admin/users/changeAvatar/" + uid,
         method: "put",
         data,
     });

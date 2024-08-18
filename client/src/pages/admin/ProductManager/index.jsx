@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { formatMoney } from "utils/helper";
-import path from "utils/path";
+import path from "constant/path";
 import { useCommonStore } from "store/common.store";
 
 function ProductManager() {

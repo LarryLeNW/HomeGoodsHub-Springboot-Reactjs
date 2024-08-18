@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 import { convertBase64ToImage, convertImageToBase64 } from "utils/file";
 import { validate } from "utils/helper";
 import ICONS from "utils/icons";
-import path from "utils/path";
+import path from "constant/path";
 
 function UpdateProduct({ location }) {
     const { showModal } = useCommonStore();

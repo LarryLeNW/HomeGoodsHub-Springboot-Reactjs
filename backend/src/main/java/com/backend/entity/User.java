@@ -50,6 +50,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
+    @Column(name = "username", columnDefinition = "NVARCHAR(255)")
     private String username; 
     private String email;
     private String password;
@@ -57,6 +58,8 @@ public class User implements Serializable {
     private String phone;
     
     private String status; 
+    
+    @Column(name = "address", columnDefinition = "NVARCHAR(255)")
     private String address; 
 
     @CreationTimestamp

@@ -1,6 +1,6 @@
 import { generatePath, useNavigate } from "react-router-dom";
 import { formatMoney, renderStars } from "utils/helper";
-import path from "utils/path";
+import path from "constant/path";
 
 function ProductCard({ data }) {
     const navigate = useNavigate();
@@ -10,9 +10,9 @@ function ProductCard({ data }) {
             onClick={() =>
                 navigate(
                     generatePath(path.DETAIL_PRODUCT, {
-                        category: data?.category.toLowerCase(),
-                        title: data?.name,
+                        category: data?.category.name.toLowerCase(),
                         id: data?.productId,
+                        title: data?.name,
                     })
                 )
             }

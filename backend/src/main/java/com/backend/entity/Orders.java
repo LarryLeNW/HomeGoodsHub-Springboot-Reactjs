@@ -39,6 +39,8 @@ public class Orders {
     private double amount;
 
     private Boolean status ;
+    
+    private String typePayment = "Thanh toán khi nhận hàng"; 
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

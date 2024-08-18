@@ -136,4 +136,31 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
+	
+	@PutMapping("changeAvatar/{id}")
+	public ResponseEntity<?> changeAvatar(@PathVariable Integer id,
+			@RequestParam(required = false) MultipartFile image) {
+		try {
+			User existingUser = userDAO.findById(id)
+					.orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+			
+			if(image == null) {
+				new IllegalArgumentException("missing image");
+			}
+			
+			String url_upload = UploadFile.saveFile(image, "User");
+			
+			if (image != null && !image.isEmpty()) {
+				existingUser.setAvatar(url_upload);
+			}
+			User updatedUser = userDAO.save(existingUser);
+			return ResponseEntity.ok(url_upload);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
+	}
+	
+	
+	
 }

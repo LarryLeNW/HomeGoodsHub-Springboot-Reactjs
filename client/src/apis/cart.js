@@ -8,9 +8,24 @@ export const addCart = (data) => {
     });
 };
 
-export const removeCart = (pid) => {
+export const updateQuantity = (data) => {
     return axios({
-        url: "/cart/" + pid,
+        url: "/user/cart/updateQuantity",
+        method: "put",
+        data,
+    });
+};
+
+export const getCarts = (uid) => {
+    return axios({
+        url: "/user/cart/" + uid,
+        method: "get",
+    });
+};
+
+export const removeCart = (cid) => {
+    return axios({
+        url: "/user/cart/" + cid,
         method: "delete",
     });
 };
